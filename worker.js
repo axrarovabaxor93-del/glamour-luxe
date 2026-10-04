@@ -54,13 +54,12 @@ async function createCheckout(request, env) {
   ? "price_1UMmISG8lGvV5X1a7eOgOIQR"
   : "price_1UMmGKG8lGvV5X1a9aYozK74";
   const planName = isVip ? 'GLAMOUR LUXE VIP — 30 days' : 'GLAMOUR LUXE Premium — 30 days';
-  const origin = "https://glamour-luxe.axrarovabaxor93.workers.dev";
   const params = formBody({
-    mode: "payment",
-    "line_items[0][price]": priceId,
-"line_items[0][quantity]": "1",
-    success_url: `${origin}/?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${origin}/?payment=cancelled`,
+  mode: "payment",
+  "line_items[0][price]": priceId,
+  "line_items[0][quantity]": "1",
+  success_url: "https://glamour-luxe.axrarovabaxor93.workers.dev/?payment=success&session_id={CHECKOUT_SESSION_ID}",
+  cancel_url: "https://glamour-luxe.axrarovabaxor93.workers.dev/?payment=cancelled",
     client_reference_id: profileId,
     "metadata[profile_id]": profileId,
     "metadata[user_id]": user.id,
