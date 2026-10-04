@@ -50,15 +50,15 @@ async function createCheckout(request, env) {
   if (!profiles?.length) return json({ ok: false, error: "Profile not found or not owned by this account." }, 404);
 
   const isVip = plan === 'vip', amount = isVip ? 4900 : 1900;
+  const priceId = isVip
+  ? "price_1UMmISG8lGvV5X1a7eOgOIQR"
+  : "price_1UMmGKG8lGvV5X1a9aYozK74";
   const planName = isVip ? 'GLAMOUR LUXE VIP — 30 days' : 'GLAMOUR LUXE Premium — 30 days';
   const origin = new URL(request.url).origin;
   const params = formBody({
     mode: "payment",
-    "line_items[0][price_data][currency]": "usd",
-    "line_items[0][price_data][unit_amount]": String(amount),
-    "line_items[0][price_data][product_data][name]": planName,
-    "line_items[0][price_data][product_data][description]": "30-day profile visibility plan",
-    "line_items[0][quantity]": "1",
+    "line_items[0][price]": priceId,
+"line_items[0][quantity]": "1",
     success_url: `${origin}/?payment=success&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/?payment=cancelled`,
     client_reference_id: profileId,
