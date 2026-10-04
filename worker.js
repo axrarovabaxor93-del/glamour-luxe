@@ -49,8 +49,8 @@ async function createCheckout(request, env) {
   const profiles = await profileResponse.json();
   if (!profiles?.length) return json({ ok: false, error: "Profile not found or not owned by this account." }, 404);
 
-  const isVip = plan === 'vip', amount = isVip ? 4900 : 1900;
-  const priceId = isVip
+  const isVip = plan === 'vip';
+const priceId = isVip
   ? "price_1UMmISG8lGvV5X1a7eOgOIQR"
   : "price_1UMmGKG8lGvV5X1a9aYozK74";
   const planName = isVip ? 'GLAMOUR LUXE VIP — 30 days' : 'GLAMOUR LUXE Premium — 30 days';
