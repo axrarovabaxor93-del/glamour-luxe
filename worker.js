@@ -54,7 +54,7 @@ async function createCheckout(request, env) {
   ? "price_1UMmISG8lGvV5X1a7eOgOIQR"
   : "price_1UMmGKG8lGvV5X1a9aYozK74";
   const planName = isVip ? 'GLAMOUR LUXE VIP — 30 days' : 'GLAMOUR LUXE Premium — 30 days';
-  const origin = new URL(request.url).origin;
+  const origin = "https://glamour-luxe.axrarovabaxor93.workers.dev";
   const params = formBody({
     mode: "payment",
     "line_items[0][price]": priceId,
