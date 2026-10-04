@@ -58,24 +58,28 @@ async function createCheckout(request, env) {
   const priceId = plan === 'vip'
     ? 'price_1UMmISG8lGvV5X1a7eOgOIQR'
     : 'price_1UMmGKG8lGvV5X1a9aYozK74';
-  const origin = GLAMOUR_WORKER_ORIGIN;
-  const params = formBody({
-    mode: "payment",
+  const stripeResponse = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${env.STRIPE_SECRET_KEY}`,
+    "Content-Type": "application/x-www-form-urlencoded" 
+  },
+  body: new URLSearchParams({
+    "mode": "payment",
+    "success_url": `${origin}/payment?success=success&session_id={CHECKOUT_SESSION_ID}`,
+    "cancel_url": `${origin}/payment?cancelled`,
     "line_items[0][price]": priceId,
     "line_items[0][quantity]": "1",
-    success_url: `${origin}/payment?success&session_id={CHECKOUT_SESSION_ID}`,
-cancel_url: `${origin}/payment?cancelled`,
-    client_reference_id: profileId,
+    "client_reference_id": profileId,
     "metadata[profile_id]": profileId,
     "metadata[user_id]": user.id,
     "metadata[plan]": plan,
     "payment_intent_data[metadata][profile_id]": profileId,
     "payment_intent_data[metadata][user_id]": user.id,
     "payment_intent_data[metadata][plan]": plan
-  });
-  const stripeResponse = await fetch("https://api.stripe.com/v1/checkout/sessions", {
-    method: "POST", headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, "Content-Type": "application/x-www-form-urlencoded" }, body: params
-  });
+  })
+});
+
   const stripeData = await stripeResponse.json();
   if (!stripeResponse.ok) return json({ ok: false, error: stripeData?.error?.message || "Stripe Checkout failed." }, 400);
   return json({ ok: true, url: stripeData.url, session_id: stripeData.id });
